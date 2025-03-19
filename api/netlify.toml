@@ -2,9 +2,6 @@
 functions = "functions"
 command = "npm start"
 
-[functions]
-  included_files = ["!node_modules/.prisma/**"]
-
 [[redirects]]
 force = true
 from = "/*"
