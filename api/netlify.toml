@@ -1,6 +1,6 @@
 [build]
-functions = "functions"
-command = "npm start"
+functions = "src/functions"
+command = "npm run start"
 
 [[redirects]]
 force = true
