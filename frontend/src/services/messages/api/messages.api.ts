@@ -1,26 +1,28 @@
-import { AxiosInstance } from "axios"
+import { AxiosInstance } from "axios";
 import IMessagesGateway, {
-    IMessagesGatewayListLastMessagesRequest,
-    IMessagesGatewayListLastMessagesResponse,
-    IMessagesGatewaySendMessageRequest,
-} from "../IMessagesGateway"
+  IMessagesGatewayListLastMessagesRequest,
+  IMessagesGatewayListLastMessagesResponse,
+  IMessagesGatewaySendMessageRequest,
+} from "../IMessagesGateway";
 
 interface IMessagesApiServiceProps {
-    api: AxiosInstance
+  api: AxiosInstance;
 }
 
 export default class MessagesApiService implements IMessagesGateway {
-    props: IMessagesApiServiceProps
+  props: IMessagesApiServiceProps;
 
-    constructor(props: IMessagesApiServiceProps) {
-        this.props = props
-    }
+  constructor(props: IMessagesApiServiceProps) {
+    this.props = props;
+  }
 
-    public async listLastMessages(request: IMessagesGatewayListLastMessagesRequest): Promise<IMessagesGatewayListLastMessagesResponse> {
-        throw new Error("Method not implemented.")
-    }
+  public async listLastMessages(
+    _request: IMessagesGatewayListLastMessagesRequest
+  ): Promise<IMessagesGatewayListLastMessagesResponse> {
+    throw new Error("Method not implemented.");
+  }
 
-    public async sendMessage(message: IMessagesGatewaySendMessageRequest): Promise<void> {
-        throw new Error("Method not implemented.")
-    }
+  public async sendMessage(_message: IMessagesGatewaySendMessageRequest): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 }
