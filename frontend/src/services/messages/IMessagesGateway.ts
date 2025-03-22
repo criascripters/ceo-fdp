@@ -1,27 +1,36 @@
 import { IMessage } from "@/@types/message"
 
-export interface IMessagesGatewaySendMessageRequest {
+export interface IMessagesGatewayAddMessageRequest {
     name: string
     message: string
 }
 
-export interface IMessagesGatewayListLastMessagesRequest {
+export interface IMessagesGatewayListMessagesRequest {
     page?: number
     perPage?: number
 }
 
-export interface IMessagesGatewayListLastMessagesResponse {
+export interface IMessagesGatewayListMessagesResponse {
     messages: IMessage[]
+}
+
+export interface IMessagesGatewayGetLastMessageResponse {
+    message: IMessage
 }
 
 export default interface IMessagesGateway {
     /**
      * Envia uma nova mensagem para a fila.
      */
-    sendMessage(message: IMessagesGatewaySendMessageRequest): Promise<void>
+    addMessage(message: IMessagesGatewayAddMessageRequest): Promise<void>
 
     /**
      * Lista as últimas mensagens enviadas por todos os usuários.
      */
-    listLastMessages(request: IMessagesGatewayListLastMessagesRequest): Promise<IMessagesGatewayListLastMessagesResponse>
+    listMessages(request?: IMessagesGatewayListMessagesRequest): Promise<IMessagesGatewayListMessagesResponse>
+
+    /**
+     * Obtém a última mensagem enviada.
+     */
+    getLastMessage(): Promise<IMessagesGatewayGetLastMessageResponse>
 }

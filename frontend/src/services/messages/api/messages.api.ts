@@ -1,8 +1,9 @@
 import { AxiosInstance } from "axios";
 import IMessagesGateway, {
-  IMessagesGatewayListLastMessagesRequest,
-  IMessagesGatewayListLastMessagesResponse,
-  IMessagesGatewaySendMessageRequest,
+  IMessagesGatewayAddMessageRequest,
+  IMessagesGatewayGetLastMessageResponse,
+  IMessagesGatewayListMessagesRequest,
+  IMessagesGatewayListMessagesResponse
 } from "../IMessagesGateway";
 
 interface IMessagesApiServiceProps {
@@ -16,13 +17,23 @@ export default class MessagesApiService implements IMessagesGateway {
     this.props = props;
   }
 
-  public async listLastMessages(
-    _request: IMessagesGatewayListLastMessagesRequest
-  ): Promise<IMessagesGatewayListLastMessagesResponse> {
-    throw new Error("Method not implemented.");
+  public async addMessage(request: IMessagesGatewayAddMessageRequest): Promise<void> {
+    return this.props.api
+      .post("/addMessage", request)
+      .then((response) => response.data);
   }
 
-  public async sendMessage(_message: IMessagesGatewaySendMessageRequest): Promise<void> {
-    throw new Error("Method not implemented.");
+  public async listMessages(request: IMessagesGatewayListMessagesRequest = {}): Promise<IMessagesGatewayListMessagesResponse> {
+    const { page = 1, perPage = 10 } = request
+
+    return this.props.api
+      .get("/db", { params: { page, perPage } })
+      .then((response) => ({ messages: response.data }));
+  }
+
+  public async getLastMessage(): Promise<IMessagesGatewayGetLastMessageResponse> {
+    return this.props.api
+      .get("/getLastMessage")
+      .then((response) => response.data);
   }
 }
