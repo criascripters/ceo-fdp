@@ -11,14 +11,18 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useMessagesDispatch } from "@/contexts/MessagesProvider"
 import { useService } from "@/contexts/ServiceProvider"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import DefaultBackground from "../DefaultBackground"
 import { formSchema, IFormSchema } from "./utils/schema"
 
 export default function MainForm() {
     // #region Services
     const { messagesService } = useService()
+    const messagesDispatch = useMessagesDispatch()
     // #endregion
 
     // #region Form
@@ -33,59 +37,62 @@ export default function MainForm() {
 
     // #region Callbacks
     function onSubmit(values: IFormSchema) {
-        messagesService.sendMessage({
-            name: values.name,
-            message: values.message,
-        }).then(() => {
-            form.reset()
+        const payload = { name: values.name, message: values.message }
 
-            // TODO: dar feedback de sucesso + atualizar lista futura de mensagens enviadas
+        messagesService.addMessage(payload).then(({ message }) => {
+            form.reset()
+            toast("Mensagem adicionada com sucesso")
+            messagesDispatch({ type: "add-message", payload: message })
         }).catch((error) => {
             console.error(error)
-
-            // TODO: dar feedback de erro
+            toast("Não foi possível enviar a mensagem. Tente novamente mais tarde.")
         })
     }
     // #endregion
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-[400px]">
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Seu nome 🏳️</FormLabel>
-                            <FormControl>
-                                <Input placeholder="criascript" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                Seu nome aparecerá junto com a mensagem do CEO fdp e no histórico de próximas mensagens.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="message"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>A mensagem que o CEO fdp vai escrever 📢</FormLabel>
-                            <FormControl>
-                                <Input placeholder="cadê?????????????" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                O CEO fdp vai mandar exatamente essa mensagem marcando o Daniel e o Ítalo. Cobre-os de
-                                verdade. 👺
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button type="submit">Enviar</Button>
-            </form>
-        </Form>
+        <DefaultBackground className="w-full flex-1 flex items-center justify-center">
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-[400px]">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Seu nome 🏳️</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="criascript" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    Seu nome aparecerá junto com a mensagem do CEO fdp e no histórico de próximas
+                                    mensagens.
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="message"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>A mensagem que o CEO fdp vai escrever 📢</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="cadê?????????????" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    O CEO fdp vai mandar exatamente essa mensagem marcando o Daniel e o Ítalo. Cobre-os
+                                    de verdade. 👺
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="submit" className="float-right bg-yellow-300 text-black hover:bg-yellow-500">
+                        Adicionar mensagem
+                    </Button>
+                </form>
+            </Form>
+        </DefaultBackground>
     )
 }

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema({
   message: String,
-  name: String,
+  name: { type: [String], index: true },
   createdAt: { type: Date, default: Date.now },
 });
 

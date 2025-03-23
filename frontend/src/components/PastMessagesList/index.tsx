@@ -1,22 +1,35 @@
-import { IMessage } from "@/@types/message";
+import { useMessages, useMessagesDispatch } from "@/contexts/MessagesProvider";
 import { useService } from "@/contexts/ServiceProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
+import DefaultBackground from "../DefaultBackground";
+import { Spinner } from "../Spinner";
+import Message from "./components/Message";
 import { MESSAGES_LIST_INTERVAL_MS } from "./constants/interval";
 
 export default function PastMessagesList() {
+    // #region Contexts
+    const { messages } = useMessages();
+    const messagesDispatch = useMessagesDispatch();
+    // #endregion
+
     // #region Services
     const { messagesService } = useService();
     // #endregion
 
-    // #region States
-    const [messages, setMessages] = useState<IMessage[]>([]);
+    // #region Memos
+    const sortedMessages = useMemo(() => {
+        return messages?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    }, [messages])
     // #endregion
 
     // #region Effects
     useEffect(() => {
         const interval = setInterval(() => {
             messagesService.listMessages().then(response => {
-                setMessages(response.messages)
+                messagesDispatch({ type: "set-messages", payload: response.messages })
+            }).catch(error => {
+                console.error(error);
+                messagesDispatch({ type: "set-messages", payload: [] })
             })
         }, MESSAGES_LIST_INTERVAL_MS);
 
@@ -25,22 +38,33 @@ export default function PastMessagesList() {
     // #endregion
 
     return (
-        <div className="flex flex-col gap-2 p-4 self-start items-center">
+        <DefaultBackground className="flex-1 h-full gap-4">
             <h1 className="text-2xl font-bold">Mensagens passadas</h1>
-            {messages.length === 0 && (<span className="text-sm text-gray-500">Nenhuma mensagem encontrada</span>)}
-            {messages.length > 0 && (
-                <div className="flex flex-col gap-2">
-                    {messages.map(message => (
-                        <div className="flex flex-col gap-2" key={message.id}>
-                            <div className="flex gap-1 justify-between">
-                                <span>{message.name}</span>
-                                <span>{message.createdAt.toLocaleString()}</span>
+            <div className="flex flex-col flex-1 w-full overflow-hidden">
+                {!sortedMessages && (
+                    <div className="flex flex-col justify-center flex-1">
+                        <Spinner size="large" className="text-gray-300 self-center" />
+                    </div>
+                )}
+                {sortedMessages && (
+                    <>
+                        {sortedMessages.length === 0 && (
+                            <div className="flex flex-col justify-center basis-3/4">
+                                <span className="text-sm text-gray-500 text-center">
+                                    Nenhuma mensagem encontrada
+                                </span>
                             </div>
-                            <span>{message.message}</span>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
+                        )}
+                        {sortedMessages.length > 0 && (
+                            <div className="flex flex-col gap-1 overflow-auto px-2">
+                                {sortedMessages.map((message, index) => (
+                                    <Message key={message.id} message={message} index={index} />
+                                ))}
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+        </DefaultBackground>
     );
 }

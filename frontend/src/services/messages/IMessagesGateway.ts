@@ -5,6 +5,10 @@ export interface IMessagesGatewayAddMessageRequest {
     message: string
 }
 
+export interface IMessagesGatewayAddMessageResponse {
+    message: IMessage
+}
+
 export interface IMessagesGatewayListMessagesRequest {
     page?: number
     perPage?: number
@@ -22,7 +26,7 @@ export default interface IMessagesGateway {
     /**
      * Envia uma nova mensagem para a fila.
      */
-    addMessage(message: IMessagesGatewayAddMessageRequest): Promise<void>
+    addMessage(message: IMessagesGatewayAddMessageRequest): Promise<IMessagesGatewayAddMessageResponse>
 
     /**
      * Lista as últimas mensagens enviadas por todos os usuários.
