@@ -40,4 +40,13 @@ router.post("/addMessage", async (req: Request, res: Response) => {
   }
 });
 
+router.patch("/messages/:id/mark-as-sent", async (req: Request, res: Response) => {
+  try {
+    const message = await Message.findByIdAndUpdate(req.params.id, { sentAt: new Date() }, { new: true });
+    res.json(message);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export default router;
