@@ -20,7 +20,11 @@ router.get("/db", async (req: Request, res: Response) => {
 
 router.get("/getLastMessage", async (req: Request, res: Response) => {
   try {
-    const message = await Message.find().sort({ _id: -1 }).limit(1);
+    const message = await Message.findOne().sort({ _id: -1 });
+    if (message) {
+      console.log(message);
+      await Message.deleteOne({ _id: message._id });
+    }
     res.json(message);
   } catch (error) {
     console.log(error);
@@ -33,6 +37,7 @@ router.post("/addMessage", async (req: Request, res: Response) => {
     const message = await Message.create({
       message: req.body.message,
       name: req.body.name,
+      targets: req.body.targets,
     });
     res.json(message);
   } catch (error) {

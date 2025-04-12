@@ -5,6 +5,7 @@ const messageSchema = new mongoose.Schema({
   name: { type: [String], index: true },
   sentAt: { type: Date },
   createdAt: { type: Date, default: Date.now },
+  targets: [{ type: String }],
 });
 
 const Message = mongoose.model("messages", messageSchema);
