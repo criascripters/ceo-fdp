@@ -26,10 +26,6 @@ export default function MainForm() {
   const messagesDispatch = useMessagesDispatch();
   // #endregion
 
-  const getTargets = (e: string) => {
-    console.log(e);
-  };
-
   // #region Form
   const form = useForm<IFormSchema>({
     resolver: zodResolver(formSchema),
