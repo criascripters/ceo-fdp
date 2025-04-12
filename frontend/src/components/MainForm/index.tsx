@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import DefaultBackground from "../DefaultBackground";
+import "./index.css";
 import { formSchema, IFormSchema } from "./utils/schema";
 
 export default function MainForm() {
@@ -113,8 +114,16 @@ export default function MainForm() {
               <FormItem>
                 <FormLabel>Destinatário 🎯</FormLabel>
                 <FormControl>
-                  <div className="grid grid-cols-2 gap-2">
-                    {["Daniel", "Ítalo", "João", "Nome1", "Nome2", "Nome3"].map((person) => (
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      "Criascript",
+                      "SalsichaDev",
+                      "Capetalista",
+                      "Daniel",
+                      "Alex",
+                      "Rogerin",
+                      "Vinicius",
+                    ].map((person) => (
                       <label
                         key={person}
                         className="flex items-center gap-2 cursor-pointer"
