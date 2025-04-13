@@ -131,3 +131,46 @@
     @apply bg-background text-foreground;
   }
 }
+
+.main {
+  display: flex;
+  height: 100%;
+  gap: 10px;
+}
+
+@media screen and (max-width: 466px) {
+  .main {
+    flex-direction: column-reverse;
+  }
+  .messages {
+    height: 40%;
+  }
+}
+
+.root {
+  background-color: #e5e7eb;
+}
+.messages {
+  width: 100%;
+}
+
+.warning {
+  display: flex;
+  position: absolute;
+  top: 0;
+  background-color: red;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+  line-height: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.clock {
+  width: 50px;
+  height: 50px;
+}

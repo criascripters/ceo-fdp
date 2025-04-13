@@ -77,7 +77,7 @@ export default function MainForm() {
                   />
                 </FormControl>
                 <FormDescription>
-                  Seu nome aparecerá junto com a mensagem do CEO fdp e no histórico de próximas mensagens.
+                  Seu nome NÃO aparecerá junto com a mensagem, apenas na fila de próximas mensagens.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -88,7 +88,7 @@ export default function MainForm() {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>A mensagem que o CEO fdp vai escrever 📢</FormLabel>
+                <FormLabel>A mensagem que o PO ARROMBADO vai escrever 📢</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="cadê?????????????"
@@ -96,8 +96,7 @@ export default function MainForm() {
                   />
                 </FormControl>
                 <FormDescription>
-                  O CEO fdp vai mandar exatamente essa mensagem marcando o Daniel e o Ítalo. Cobre-os de
-                  verdade. 👺
+                  O PO ARROMBADO vai mandar exatamente essa mensagem. Cobre-os de verdade. 👺
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -108,7 +107,7 @@ export default function MainForm() {
             name="targets"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Destinatário 🎯</FormLabel>
+                <FormLabel>Quem quer marcar? 🎯</FormLabel>
                 <FormControl>
                   <div className="grid grid-cols-3 gap-2">
                     {[
@@ -142,7 +141,6 @@ export default function MainForm() {
                     ))}
                   </div>
                 </FormControl>
-                <FormDescription>Escolha os destinatários</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
