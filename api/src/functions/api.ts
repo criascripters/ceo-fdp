@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/", router);
+app.set("trust proxy", true);
 
 if (process.env.NODE_ENV === "dev") {
   app.listen(3000, () => {

@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import Message from "./models/Message";
 
 const router = express.Router();
@@ -31,9 +31,12 @@ router.get("/getLastMessage", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/addMessage", async (req: Request, res: Response) => {
+router.post("/addMessage", async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log("request:" + req.body);
+    const rawIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    const ip = typeof rawIp === "string" ? rawIp.split(",")[0].trim() : rawIp;
+    console.log("IP do usuário:", ip);
     const message = await Message.create({
       message: req.body.message,
       name: req.body.name,

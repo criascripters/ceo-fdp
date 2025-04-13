@@ -61,7 +61,7 @@ export default function PastMessagesList() {
                 </span>
               </div>
             )}
-            {sortedMessages.length > 0 && (
+            {sortedMessages.length < 0 && ( //lembrar de voltar para > 0
               <div className="flex flex-col gap-1 overflow-auto px-2">
                 {sortedMessages.map((message, index) => (
                   <Message
