@@ -21,7 +21,7 @@ router.get("/db", async (req: Request, res: Response) => {
 
 router.get("/getLastMessage", async (req: Request, res: Response) => {
   try {
-    const message = await Message.findOne().sort({ _id: -1 });
+    const message = await Message.findOne().sort({ _id: 1 });
     if (message) {
       console.log(message);
       message.sentAt = new Date();
