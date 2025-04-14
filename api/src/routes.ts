@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import Message from "./models/Message";
+import PastMessages from "./models/PastMessages";
 
 const router = express.Router();
 
@@ -23,8 +24,19 @@ router.get("/getLastMessage", async (req: Request, res: Response) => {
     const message = await Message.findOne().sort({ _id: -1 });
     if (message) {
       console.log(message);
-      // await Message.deleteOne({ _id: message._id });
+      message.sentAt = new Date();
+      const pastMessages = await PastMessages.create(message.toJSON());
+      await Message.deleteOne({ _id: message._id });
     }
+    res.json(message);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/getPastMessages", async (req: Request, res: Response) => {
+  try {
+    const message = await PastMessages.find();
     res.json(message);
   } catch (error) {
     console.log(error);
