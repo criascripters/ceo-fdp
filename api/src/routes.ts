@@ -23,7 +23,7 @@ router.get("/getLastMessage", async (req: Request, res: Response) => {
     const message = await Message.findOne().sort({ _id: -1 });
     if (message) {
       console.log(message);
-      await Message.deleteOne({ _id: message._id });
+      // await Message.deleteOne({ _id: message._id });
     }
     res.json(message);
   } catch (error) {
@@ -41,6 +41,7 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
       message: req.body.message,
       name: req.body.name,
       targets: req.body.targets,
+      ip: ip,
     });
     res.json(message);
   } catch (error) {

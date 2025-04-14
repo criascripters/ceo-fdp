@@ -6,6 +6,7 @@ const messageSchema = new mongoose.Schema({
   sentAt: { type: Date },
   createdAt: { type: Date, default: Date.now },
   targets: [{ type: String }],
+  ip: String,
 });
 
 const Message = mongoose.model("messages", messageSchema);
