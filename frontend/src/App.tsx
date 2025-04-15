@@ -18,21 +18,19 @@ function App() {
   }, []);
   return (
     <ServiceProvider>
-      <div className="flex flex-col justify-center items-center h-screen bg-gray-200 px-2">
-        <div className="flex gap-4 items-center justify-center max-w-[1000px] h-max basis-2/3 max-h-[80%]">
+      <div className="flex flex-col items-center h-screen bg-gray-200 px-2">
+        {showWarning && (
+          <div className="warning">
+            <img
+              className="clock"
+              src="./clock.png"
+              alt=""
+            />
+            <span>JÁ PASSOU DAS 18H MALUCO, TO NO BAR BEBENDO. VOLTO A MANDAR MENSAGENS AMANHÃ AS 8H</span>
+          </div>
+        )}
+        <div className="flex gap-4 items-center justify-center overflow-auto flex-1 max-w-[1000px] basis-2/3 max-h-[80%]">
           <MessagesProvider>
-            {showWarning && (
-              <div className="warning">
-                <img
-                  className="clock"
-                  src="./clock.png"
-                  alt=""
-                />
-                <span>
-                  JÁ PASSOU DAS 18H MALUCO, TO NO BAR BEBENDO. VOLTO A MANDAR MENSAGENS AMANHÃ AS 8H
-                </span>
-              </div>
-            )}
             <div className="main">
               <PastMessagesList />
               <div className="flex-2 flex flex-col gap-4 items-center self-start h-full">

@@ -7,6 +7,11 @@ const messageSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   targets: [{ type: String }],
   ip: String,
+  userCountry: String,
+  userRegionName: String,
+  userCity: String,
+  userISP: String,
+  userOrg: String,
 });
 
 const PastMessages = mongoose.model("pastMessages", messageSchema);

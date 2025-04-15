@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import Message from "./models/Message";
 import PastMessages from "./models/PastMessages";
+import { getGeo } from "./utils/getGeo";
 
 const router = express.Router();
 
@@ -49,6 +50,10 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
     const rawIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     const ip = typeof rawIp === "string" ? rawIp.split(",")[0].trim() : rawIp;
     console.log("IP do usuário:", ip);
+
+    const geo = await getGeo("2804:2a80:7ffd:6f00:d103:f0cb:acce:8ede");
+    console.log("geo: " + geo);
+
     const message = await Message.create({
       message: req.body.message,
       name: req.body.name,
