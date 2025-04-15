@@ -4,6 +4,7 @@ import { rateLimit } from "express-rate-limit";
 import serverless from "serverless-http";
 import "../database";
 import router from "../routes";
+var cookieParser = require("cookie-parser");
 
 const app = express();
 const limiter = rateLimit({
@@ -24,6 +25,7 @@ app.use(
 app.use("/", router);
 app.set("trust proxy", true);
 app.use(limiter);
+app.use(cookieParser());
 
 if (process.env.NODE_ENV === "dev") {
   app.listen(3000, () => {

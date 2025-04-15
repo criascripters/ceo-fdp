@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import Message from "./models/Message";
 import PastMessages from "./models/PastMessages";
+import { getDiscordToken } from "./utils/getDiscordToken";
 import { getGeo } from "./utils/getGeo";
-
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -71,10 +71,20 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
   }
 });
 
-router.patch("/messages/:id/mark-as-sent", async (req: Request, res: Response) => {
+router.post("/auth/discord", async (req: Request, res: Response) => {
   try {
-    const message = await Message.findByIdAndUpdate(req.params.id, { sentAt: new Date() }, { new: true });
-    res.json(message);
+    const { code } = req.body;
+    const params = new URLSearchParams();
+    params.append("client_id", process.env.DISCORD_CLIENT_ID as string);
+    params.append("client_secret", process.env.DISCORD_CLIENT_SECRET as string);
+    params.append("grant_type", "authorization_code");
+    params.append("code", code);
+    params.append("redirect_uri", process.env.DISCORD_REDIRECT_URI as string);
+
+    getDiscordToken(code).then((token) => {
+      res.cookie("token", token, { httpOnly: true });
+      token;
+    });
   } catch (error) {
     console.log(error);
   }

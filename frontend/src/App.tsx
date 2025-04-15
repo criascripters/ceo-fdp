@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import { useEffect, useState } from "react";
+import LoginButton from "./components/DiscordLogin";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import MainForm from "./components/MainForm";
@@ -15,17 +16,21 @@ function App() {
     if (currentHour >= 18 || currentHour < 8) {
       setShowWarning(true);
     }
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+
+    if (code) {
+      sessionStorage.setItem("code", code);
+      console.log("Código OAuth recebido:", code);
+    }
   }, []);
   return (
     <ServiceProvider>
+      <LoginButton />
       <div className="flex flex-col items-center h-screen bg-gray-200 px-2">
         {showWarning && (
           <div className="warning">
-            <img
-              className="clock"
-              src="./clock.png"
-              alt=""
-            />
+            <img className="clock" src="./clock.png" alt="" />
             <span>JÁ PASSOU DAS 18H MALUCO, TO NO BAR BEBENDO. VOLTO A MANDAR MENSAGENS AMANHÃ AS 8H</span>
           </div>
         )}
