@@ -51,14 +51,19 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
     const ip = typeof rawIp === "string" ? rawIp.split(",")[0].trim() : rawIp;
     console.log("IP do usuário:", ip);
 
-    const geo = await getGeo("2804:2a80:7ffd:6f00:d103:f0cb:acce:8ede");
-    console.log("geo: " + geo);
+    const geo = await getGeo(ip as string);
+    console.log("geo: ", geo);
 
     const message = await Message.create({
       message: req.body.message,
       name: req.body.name,
       targets: req.body.targets,
       ip: ip,
+      userCountry: geo.country,
+      userRegionName: geo.regionName,
+      userCity: geo.city,
+      userISP: geo.isp,
+      userOrg: geo.org,
     });
     res.json(message);
   } catch (error) {
