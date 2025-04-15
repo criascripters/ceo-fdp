@@ -58,11 +58,11 @@ export default function MainForm() {
   // #endregion
 
   return (
-    <DefaultBackground className="w-full flex-1 flex items-center justify-center">
+    <DefaultBackground className="w-full flex-1 flex items-center justify-center overflow-hidden">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 max-w-[400px]"
+          className="space-y-8 max-w-[400px] flex-1 sm:overflow-auto px-6 my-6"
         >
           <FormField
             control={form.control}
@@ -107,9 +107,9 @@ export default function MainForm() {
             name="targets"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Quem quer marcar? 🎯</FormLabel>
+                <FormLabel>Quem você quer marcar? 🎯</FormLabel>
                 <FormControl>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {[
                       "Criascript",
                       "SalsichaDev",
@@ -135,6 +135,7 @@ export default function MainForm() {
                               field.onChange(field.value.filter((item) => item !== person));
                             }
                           }}
+                          className="cursor-pointer"
                         />
                         <span>{person}</span>
                       </label>
@@ -147,7 +148,7 @@ export default function MainForm() {
           />
           <Button
             type="submit"
-            className="float-right bg-yellow-300 text-black hover:bg-yellow-500"
+            className="float-right cursor-pointer bg-yellow-300 text-black hover:bg-yellow-500"
           >
             Adicionar mensagem
           </Button>

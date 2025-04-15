@@ -41,7 +41,7 @@ export default function PastMessagesList() {
   // #endregion
 
   return (
-    <DefaultBackground className="messages flex-1 h-full gap-4">
+    <DefaultBackground className="flex flex-col w-full gap-4 p-6 sm:flex-1 sm:h-full">
       <h1 className="text-2xl font-bold">Fila de mensagens</h1>
       <div className="flex flex-col flex-1 w-full overflow-hidden">
         {!sortedMessages && (
