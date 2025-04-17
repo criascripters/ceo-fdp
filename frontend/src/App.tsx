@@ -14,9 +14,7 @@ function App() {
     const currentHour = new Date().getHours();
     if (currentHour >= 18 || currentHour < 8) {
       setShowWarning(true);
-      console.log(showWarning);
     }
-
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
 
@@ -28,6 +26,7 @@ function App() {
       window.location.href = "/";
       setIsLoggedIn(true);
     }
+    console.log("Wow, tu é mt hacker🤠");
   }, []);
   const getCookie = async (code: string) => {
     try {
@@ -38,7 +37,6 @@ function App() {
         if (res.status === 200) {
           window.location.href = "/";
           localStorage.setItem("isLoggedIn", "true");
-          console.log("logado");
         }
       });
     } catch (error) {

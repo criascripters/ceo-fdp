@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import Message from "./models/Message";
 import PastMessages from "./models/PastMessages";
 import { getDiscordToken } from "./utils/getDiscordToken";
+import { getDiscordUserInfo } from "./utils/getDiscordUserInfo";
 import { getGeo } from "./utils/getGeo";
 const router = express.Router();
 
@@ -52,6 +53,9 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
     console.log("IP do usuário:", ip);
 
     const geo = await getGeo(ip as string);
+    const token = req.cookies.token;
+    const user = await getDiscordUserInfo(token);
+
     console.log("geo: ", geo);
 
     const message = await Message.create({
@@ -65,7 +69,7 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
       userISP: geo.isp,
       userOrg: geo.org,
     });
-    res.json(message);
+    res.json(user);
   } catch (error) {
     console.log(error);
   }
