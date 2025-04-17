@@ -81,8 +81,8 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
     params.append("code", code);
     params.append("redirect_uri", process.env.DISCORD_REDIRECT_URI as string);
 
-    getDiscordToken(code).then((token) => {
-      res.cookie("token", token, { httpOnly: true });
+    await getDiscordToken(code).then((token) => {
+      res.cookie("token", token, { httpOnly: true }).status(200);
       token;
     });
   } catch (error) {

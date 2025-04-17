@@ -17,9 +17,10 @@ const limiter = rateLimit({
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://po.criascript.dev", "http://localhost:5173"],
+    origin: ["https://po.criascript.dev"],
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
+    credentials: true,
   })
 );
 app.use("/", router);

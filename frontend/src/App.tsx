@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import { useEffect, useState } from "react";
+import LoginButton from "./components/DiscordLogin";
 import Footer from "./components/Footer";
 import MainContent from "./components/MainContent";
 import OutOfOfficeWarning from "./components/OutOfOfficeWarning";
@@ -19,12 +20,24 @@ function App() {
 
     if (code) {
       sessionStorage.setItem("code", code);
-      console.log("Código OAuth recebido:", code);
+      getCookie(code);
     }
   }, []);
-
+  const getCookie = async (code: string) => {
+    try {
+      const response = await fetch(process.env.API_URL + "/auth/discord", {
+        method: "POST",
+        body: JSON.stringify({ code: code }),
+      }).then((res) => {
+        console.log(res.status);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <ServiceProvider>
+      <LoginButton />
       <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-300">
         <OutOfOfficeWarning />
         <MainContent />
