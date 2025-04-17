@@ -8,6 +8,7 @@ import ServiceProvider from "./contexts/ServiceProvider";
 
 function App() {
   const [showWarning, setShowWarning] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -23,6 +24,10 @@ function App() {
       sessionStorage.setItem("code", code);
       getCookie(code);
     }
+    if (sessionStorage.getItem("isLoggedIn")) {
+      window.location.href = "/";
+      setIsLoggedIn(true);
+    }
   }, []);
   const getCookie = async (code: string) => {
     try {
@@ -30,7 +35,11 @@ function App() {
         method: "POST",
         body: JSON.stringify({ code: code }),
       }).then((res) => {
-        console.log("res:", res);
+        if (res.status === 200) {
+          window.location.href = "/";
+          localStorage.setItem("isLoggedIn", "true");
+          console.log("logado");
+        }
       });
     } catch (error) {
       console.log(error);
@@ -38,7 +47,7 @@ function App() {
   };
   return (
     <ServiceProvider>
-      <LoginButton />
+      {isLoggedIn && <LoginButton />}
       <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-300">
         <OutOfOfficeWarning />
         <MainContent />
