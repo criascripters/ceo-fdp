@@ -7,7 +7,7 @@ import ServiceProvider from "./contexts/ServiceProvider";
 function App() {
   return (
     <ServiceProvider>
-      <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-200">
+      <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-300">
         <OutOfOfficeWarning />
         <MainContent />
         <Footer />
