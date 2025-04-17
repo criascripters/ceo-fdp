@@ -13,6 +13,7 @@ function App() {
     const currentHour = new Date().getHours();
     if (currentHour >= 18 || currentHour < 8) {
       setShowWarning(true);
+      console.log(showWarning);
     }
 
     const params = new URLSearchParams(window.location.search);
@@ -29,6 +30,7 @@ function App() {
         method: "POST",
         body: JSON.stringify({ code: code }),
       }).then((res) => {
+        console.log(response);
         console.log(res.status);
       });
     } catch (error) {
