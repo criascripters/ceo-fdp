@@ -2,7 +2,7 @@ import { FaDiscord } from "react-icons/fa";
 
 export default function LoginButton() {
   const discordLogin = () => {
-    const clientId = process.env.DISCORD_ID;
+    const clientId = import.meta.env.VITE_DISCORD_ID;
     const redirectUri = encodeURIComponent("https://po.criascript.dev/");
     const scope = encodeURIComponent("identify email");
 
