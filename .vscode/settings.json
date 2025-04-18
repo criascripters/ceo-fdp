@@ -1,6 +1,17 @@
 {
+  /**
+   * Editor
+   */
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always"
   },
-  "cSpell.words": ["VITE"]
+  /**
+   * Spell Checker
+   */
+  "cSpell.words": ["VITE"],
+  /**
+   * ESLint
+   */
+  "eslint.validate": ["javascript", "typescript", "typescriptreact"],
+  "eslint.enable": true
 }
