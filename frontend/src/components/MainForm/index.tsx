@@ -49,7 +49,6 @@ export default function MainForm() {
         form.reset();
         toast("Mensagem adicionada com sucesso");
         messagesDispatch({ type: "add-message", payload: message });
-        console.log(message);
       })
       .catch((error) => {
         console.error(error);

@@ -5,14 +5,14 @@ import IMessagesGateway, {
   IMessagesGatewayAddMessageResponse,
   IMessagesGatewayGetLastMessageResponse,
   IMessagesGatewayListMessagesRequest,
-  IMessagesGatewayListMessagesResponse
+  IMessagesGatewayListMessagesResponse,
 } from "../IMessagesGateway";
 
 interface IRawMessage {
-  _id: string
-  name: string
-  message: string
-  createdAt: string
+  _id: string;
+  name: string;
+  message: string;
+  createdAt: string;
 }
 
 interface IMessagesApiServiceProps {
@@ -26,14 +26,19 @@ export default class MessagesApiService implements IMessagesGateway {
     this.props = props;
   }
 
-  public async addMessage(request: IMessagesGatewayAddMessageRequest): Promise<IMessagesGatewayAddMessageResponse> {
-    return this.props.api
-      .post<IRawMessage>("/addMessage", request)
-      .then((response) => ({ message: this.parseRawMessage(response.data) }));
+  public async addMessage(
+    request: IMessagesGatewayAddMessageRequest
+  ): Promise<IMessagesGatewayAddMessageResponse> {
+    return this.props.api.post<IRawMessage>("/addMessage", request).then((response) => {
+      console.log("raw response:", response.data);
+      return { message: this.parseRawMessage(response.data) };
+    });
   }
 
-  public async listMessages(request: IMessagesGatewayListMessagesRequest = {}): Promise<IMessagesGatewayListMessagesResponse> {
-    const { page = 1, perPage = 10 } = request
+  public async listMessages(
+    request: IMessagesGatewayListMessagesRequest = {}
+  ): Promise<IMessagesGatewayListMessagesResponse> {
+    const { page = 1, perPage = 10 } = request;
 
     return this.props.api
       .get<IRawMessage[]>("/db", { params: { page, perPage } })
@@ -52,6 +57,6 @@ export default class MessagesApiService implements IMessagesGateway {
       name: message.name,
       message: message.message,
       createdAt: new Date(message.createdAt),
-    }
+    };
   }
 }
