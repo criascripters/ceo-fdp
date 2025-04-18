@@ -89,6 +89,7 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
         secure: true,
         sameSite: "strict",
         path: "/",
+        maxAge: 1000 * 60 * 60 * 24,
       })
       .status(200)
       .send("OK");
