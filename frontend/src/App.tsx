@@ -1,4 +1,3 @@
-import { Toaster } from '@/components/ui/sonner'
 import LoginButton from './components/DiscordLogin'
 import Footer from './components/Footer'
 import MainContent from './components/MainContent'
@@ -21,11 +20,10 @@ function App() {
   if (!isLoggedIn) return <LoginButton />
 
   return (
-    <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-300">
+    <div className="flex flex-col justify-between items-center h-dvh overflow-hidden bg-gray-300">
       <OutOfOfficeWarning />
       <MainContent />
       <Footer />
-      <Toaster />
     </div>
   )
 }
