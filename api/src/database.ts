@@ -1,14 +1,12 @@
-import dotenv from "dotenv";
 import mongoose from "mongoose";
-
-dotenv.config();
+import { settings } from "./utils/settings";
 
 async function connect() {
   try {
-    await mongoose.connect(process.env.DATABASE_URL as string);
-    console.log("[ONLINE] Connected to mongoDB:", process.env.DATABASE_URL);
+    await mongoose.connect(settings.databaseUrl);
+    console.info("[INFO] Connected to mongoDB:", settings.databaseUrl);
   } catch (error) {
-    console.log("[OFFLINE] Error connecting to mongoDB:", error);
+    console.error("[ERROR] Error connecting to mongoDB:", error);
   }
 }
 

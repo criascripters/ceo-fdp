@@ -2,7 +2,9 @@ import express, { NextFunction, Request, Response } from "express";
 import Message from "./models/Message";
 import PastMessages from "./models/PastMessages";
 import { getDiscordToken } from "./utils/getDiscordToken";
+import { getDiscordUserInfo } from "./utils/getDiscordUserInfo";
 import { getGeo } from "./utils/getGeo";
+import { settings } from "./utils/settings";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -81,18 +83,34 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
 
 router.post("/auth/discord", async (req: Request, res: Response) => {
   try {
+    // Validate through access token (from cookies)
+    const cookieToken = req.cookies?.token
+    if (typeof cookieToken === "string" && cookieToken !== "") {
+      try {
+        await getDiscordUserInfo(cookieToken)
+        res.status(200).send("OK");
+      } catch (error) {
+        // do nothing
+      }
+    }
+
+    // Validate through oauth code (from body)
     const { code } = req.body;
-    console.log("token: ", code);
+    if (!code) {
+      res.status(400).send("Missing code.");
+      return
+    }
+
     const token = await getDiscordToken(code);
-    console.log("token: ", token);
     if (!token.access_token) {
       res.status(401).send(token.error_description);
       return;
     }
+
     res
       .cookie("token", token.access_token, {
         httpOnly: true,
-        secure: true,
+        secure: settings.env === "prod",
         sameSite: "strict",
         path: "/",
         maxAge: 1000 * 60 * 60 * 24,
@@ -100,7 +118,8 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
       .status(200)
       .send("OK");
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).send("Error");
   }
 });
 
