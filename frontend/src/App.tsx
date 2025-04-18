@@ -22,7 +22,7 @@ function App() {
       sessionStorage.setItem("code", code);
       getCookie(code);
     }
-    if (sessionStorage.getItem("isLoggedIn")) {
+    if (sessionStorage.getItem("isLoggedIn") === "true") {
       window.location.href = "/";
       setIsLoggedIn(true);
     }
@@ -34,6 +34,7 @@ function App() {
         method: "POST",
         body: JSON.stringify({ code: code }),
       }).then((res) => {
+        console.log("res: ", res);
         if (res.status === 200) {
           window.location.href = "/";
           localStorage.setItem("isLoggedIn", "true");
