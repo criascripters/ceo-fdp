@@ -1,13 +1,14 @@
-import { FaDiscord } from "react-icons/fa";
+import { useCallback } from 'react'
+import { FaDiscord } from 'react-icons/fa'
+import { discordRedirectUrl } from './constants/discord-redirect-url'
 
 export default function LoginButton() {
-  const discordLogin = () => {
-    const clientId = import.meta.env.VITE_DISCORD_ID;
-    const redirectUri = encodeURIComponent("https://po.criascript.dev/");
-    const scope = encodeURIComponent("identify email");
+  // #region Callbacks
+  const discordLogin = useCallback(() => {
+    window.location.href = discordRedirectUrl
+  }, [])
+  // #endregion
 
-    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
-  };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-[#1e1e2f] to-[#15161c]">
       <div className="backdrop-blur-lg bg-white/5 border border-white/10 p-10 rounded-3xl shadow-2xl text-center max-w-sm w-full">
@@ -25,5 +26,5 @@ export default function LoginButton() {
         </button>
       </div>
     </div>
-  );
+  )
 }
