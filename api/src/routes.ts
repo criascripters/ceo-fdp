@@ -83,7 +83,7 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
       res.status(401).send("Unauthorized");
       return;
     }
-    res.cookie("token", token, { httpOnly: true }).status(200).send("OK");
+    res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: true }).status(200).send("OK");
   } catch (error) {
     console.log(error);
   }
