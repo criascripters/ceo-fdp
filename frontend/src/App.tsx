@@ -11,6 +11,9 @@ function App() {
   const [showWarning, setShowWarning] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  console.log(showWarning);
+  console.log(isLoggedIn);
+
   useEffect(() => {
     const currentHour = new Date().getHours();
     if (currentHour >= 18 || currentHour < 8) {
