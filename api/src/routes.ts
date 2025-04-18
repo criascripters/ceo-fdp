@@ -79,8 +79,8 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
     console.log("token: ", code);
     const token = await getDiscordToken(code);
     console.log("token: ", token);
-    if (!token) {
-      res.status(401).send("Unauthorized");
+    if (!token.access_token) {
+      res.status(401).send(token.error_description);
       return;
     }
     res
