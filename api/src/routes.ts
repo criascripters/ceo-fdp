@@ -89,6 +89,8 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
       try {
         await getDiscordUserInfo(cookieToken)
         res.status(200).send("OK");
+
+        return;
       } catch (error) {
         // do nothing
       }
