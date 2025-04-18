@@ -4,7 +4,7 @@ export async function getDiscordToken(code: string) {
   params.append("client_secret", process.env.DISCORD_CLIENT_SECRET!);
   params.append("grant_type", "authorization_code");
   params.append("code", code);
-  params.append("redirect_uri", "https://po.criascript.dev/");
+  params.append("redirect_uri", "https://po.criascript.dev");
   params.append("scope", "identify email");
 
   const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
