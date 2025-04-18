@@ -7,6 +7,7 @@ import OutOfOfficeWarning from "./components/OutOfOfficeWarning";
 import ServiceProvider from "./contexts/ServiceProvider";
 
 function App() {
+  // tslint:disable:no-unused-variable
   const [showWarning, setShowWarning] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
