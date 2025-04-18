@@ -19,7 +19,7 @@ export async function getDiscordToken(code: string) {
 
   if (tokenData.error) {
     console.log(tokenData.error_description || "Erro ao obter token do Discord");
-    return null;
+    return tokenData.access_token;
   }
 
   return tokenData.access_token;
