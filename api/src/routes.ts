@@ -46,6 +46,12 @@ router.get("/getPastMessages", async (req: Request, res: Response) => {
 
 router.post("/addMessage", async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const cookies = req.cookies.token;
+
+    if (!cookies) {
+      res.status(401).send("Token not found");
+      return;
+    }
     console.log("request:" + req.body);
     const rawIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     const ip = typeof rawIp === "string" ? rawIp.split(",")[0].trim() : rawIp;
