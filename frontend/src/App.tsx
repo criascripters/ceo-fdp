@@ -20,7 +20,7 @@ function App() {
 
     if (code) {
       sessionStorage.setItem("code", code);
-      getCookie(code);
+      //getCookie(code);
     }
     if (sessionStorage.getItem("isLoggedIn") === "true") {
       window.location.href = "/";
@@ -46,7 +46,7 @@ function App() {
   };
   return (
     <ServiceProvider>
-      {isLoggedIn && <LoginButton />}
+      {!isLoggedIn && <LoginButton />}
       <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-300">
         <OutOfOfficeWarning />
         <MainContent />
