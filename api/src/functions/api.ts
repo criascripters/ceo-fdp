@@ -30,7 +30,7 @@ app.use(cookieParser());
 
 if (process.env.NODE_ENV === "dev") {
   app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+    console.log("[ONLINE] Running on port 3000");
   });
 }
 export default app;
