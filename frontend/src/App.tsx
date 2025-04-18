@@ -46,7 +46,8 @@ function App() {
   };
   return (
     <ServiceProvider>
-      {!isLoggedIn && <LoginButton />}
+      <LoginButton />
+      {/* {!isLoggedIn && <LoginButton />} */}
       <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-300">
         <OutOfOfficeWarning />
         <MainContent />
