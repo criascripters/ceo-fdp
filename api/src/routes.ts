@@ -87,6 +87,8 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
       .cookie("token", token.access_token, {
         httpOnly: true,
         secure: true,
+        sameSite: "strict",
+        path: "/",
       })
       .status(200)
       .send("OK");
