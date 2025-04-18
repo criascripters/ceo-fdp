@@ -1,82 +1,32 @@
 import { Toaster } from '@/components/ui/sonner'
-import { useEffect, useState } from 'react'
 import LoginButton from './components/DiscordLogin'
 import Footer from './components/Footer'
 import MainContent from './components/MainContent'
 import OutOfOfficeWarning from './components/OutOfOfficeWarning'
-import ServiceProvider from './contexts/ServiceProvider'
-import { settings } from './utils/settings'
+import { Spinner } from './components/Spinner'
+import { useLogin } from './contexts/LoginProvider'
 
 function App() {
-  const [showWarning, setShowWarning] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  // #region Contexts
+  const { isLoggedIn } = useLogin()
+  // #endregion
 
-  console.log(showWarning)
-  console.log(isLoggedIn)
-
-  useEffect(() => {
-    const currentHour = new Date().getHours()
-    if (currentHour >= 18 || currentHour < 8) {
-      setShowWarning(true)
-    }
-    const params = new URLSearchParams(window.location.search)
-    const code = params.get('code')
-
-    if (code) {
-      sessionStorage.setItem('code', code)
-    }
-
-    const codeFromSession = sessionStorage.getItem('code')
-
-    if (codeFromSession) {
-      getCookie(codeFromSession)
-        .then((res) => {
-          console.log('res: ', res)
-          if (res?.status === 200) {
-            //window.location.href = "/";
-            localStorage.setItem('isLoggedIn', 'true')
-          }
-        })
-        .catch((err: unknown) => {
-          // @TODO: handle properly
-          console.log(err)
-        })
-    }
-
-    if (sessionStorage.getItem('isLoggedIn') === 'true') {
-      setIsLoggedIn(true)
-      window.location.href = '/'
-    }
-    console.log('Wow, tu é mt hacker🤠')
-  }, [])
-
-  const getCookie = async (code: string) => {
-    try {
-      console.log('code getcookie:', code)
-      const body = JSON.stringify({ code: code })
-      console.log('body:', body)
-      return await fetch(`${settings.apiUrl}/auth/discord`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body,
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  return (
-    <ServiceProvider>
-      <LoginButton />
-      {!isLoggedIn && <LoginButton />}
-      <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-300">
-        <OutOfOfficeWarning />
-        <MainContent />
-        <Footer />
+  if (isLoggedIn === null)
+    return (
+      <div className="bg-transparent h-screen flex flex-col justify-center">
+        <Spinner />
       </div>
+    )
+
+  if (!isLoggedIn) return <LoginButton />
+
+  return (
+    <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-300">
+      <OutOfOfficeWarning />
+      <MainContent />
+      <Footer />
       <Toaster />
-    </ServiceProvider>
+    </div>
   )
 }
 
