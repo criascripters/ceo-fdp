@@ -7,7 +7,6 @@ import OutOfOfficeWarning from "./components/OutOfOfficeWarning";
 import ServiceProvider from "./contexts/ServiceProvider";
 
 function App() {
-  // tslint:disable:no-unused-variable
   const [showWarning, setShowWarning] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -26,9 +25,9 @@ function App() {
       sessionStorage.setItem("code", code);
     }
 
-    // if (sessionStorage.getItem("code")) {
-    //   getCookie(sessionStorage.getItem("code")!);
-    // }
+    if (sessionStorage.getItem("code")) {
+      getCookie(sessionStorage.getItem("code")!);
+    }
 
     if (sessionStorage.getItem("isLoggedIn") === "true") {
       setIsLoggedIn(true);
@@ -36,28 +35,28 @@ function App() {
     }
     console.log("Wow, tu é mt hacker🤠");
   }, []);
-  // const getCookie = async (code: string) => {
-  //   try {
-  //     console.log("code getcookie:", code);
-  //     const body = JSON.stringify({ code: code });
-  //     console.log("body:", body);
-  //     await fetch(import.meta.env.VITE_API_URL + "/auth/discord", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: body,
-  //     }).then((res) => {
-  //       console.log("res: ", res);
-  //       if (res.status === 200) {
-  //         //window.location.href = "/";
-  //         localStorage.setItem("isLoggedIn", "true");
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const getCookie = async (code: string) => {
+    try {
+      console.log("code getcookie:", code);
+      const body = JSON.stringify({ code: code });
+      console.log("body:", body);
+      await fetch(import.meta.env.VITE_API_URL + "/auth/discord", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: body,
+      }).then((res) => {
+        console.log("res: ", res);
+        if (res.status === 200) {
+          //window.location.href = "/";
+          localStorage.setItem("isLoggedIn", "true");
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <ServiceProvider>
       <LoginButton />
