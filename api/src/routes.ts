@@ -98,4 +98,14 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
   }
 });
 
+router.post("/test", async (req: Request, res: Response) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    res.status(401).send("Não autenticado");
+  }
+
+  res.send("Autenticado com token: " + token);
+});
+
 export default router;
