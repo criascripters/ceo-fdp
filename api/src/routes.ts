@@ -76,15 +76,13 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
 router.post("/auth/discord", async (req: Request, res: Response) => {
   try {
     const { code } = req.body;
-    const params = new URLSearchParams();
-    params.append("client_id", process.env.DISCORD_CLIENT_ID as string);
-    params.append("client_secret", process.env.DISCORD_CLIENT_SECRET as string);
-    params.append("grant_type", "authorization_code");
-    params.append("code", code);
-    params.append("redirect_uri", process.env.DISCORD_REDIRECT_URI as string);
-    console.log("code:", code);
-
+    console.log("token: ", code);
     const token = await getDiscordToken(code);
+    console.log("token: ", token);
+    if (!token) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
     res.cookie("token", token, { httpOnly: true }).status(200).send("OK");
   } catch (error) {
     console.log(error);

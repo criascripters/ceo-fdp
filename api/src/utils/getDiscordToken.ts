@@ -4,7 +4,7 @@ export async function getDiscordToken(code: string) {
   params.append("client_secret", process.env.DISCORD_CLIENT_SECRET!);
   params.append("grant_type", "authorization_code");
   params.append("code", code);
-  params.append("redirect_uri", "http://localhost:4000/auth/discord/redirect");
+  params.append("redirect_uri", "https://po.criascript.dev/");
   params.append("scope", "identify email");
 
   const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
@@ -18,7 +18,8 @@ export async function getDiscordToken(code: string) {
   const tokenData = await tokenRes.json();
 
   if (tokenData.error) {
-    throw new Error(tokenData.error_description || "Erro ao obter token do Discord");
+    console.log(tokenData.error_description || "Erro ao obter token do Discord");
+    return tokenData.error_description;
   }
 
   return tokenData.access_token;

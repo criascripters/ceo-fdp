@@ -24,7 +24,10 @@ function App() {
 
     if (code) {
       sessionStorage.setItem("code", code);
-      getCookie(code);
+    }
+
+    if (sessionStorage.getItem("code")) {
+      getCookie(sessionStorage.getItem("code")!);
     }
 
     if (sessionStorage.getItem("isLoggedIn") === "true") {
@@ -36,9 +39,14 @@ function App() {
   const getCookie = async (code: string) => {
     try {
       console.log("code getcookie:", code);
+      const body = JSON.stringify({ code: code });
+      console.log("body:", body);
       await fetch(import.meta.env.VITE_API_URL + "/auth/discord", {
         method: "POST",
-        body: JSON.stringify({ code: code }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: body,
       }).then((res) => {
         console.log("res: ", res);
         if (res.status === 200) {
