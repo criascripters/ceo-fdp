@@ -38,7 +38,7 @@ function App() {
   const getCookie = async (code: string) => {
     try {
       console.log("code getcookie:", code);
-      const body = JSON.stringify({ code: code });
+      const body = JSON.stringify({ code: "code" });
       console.log("body:", body);
       await fetch(import.meta.env.VITE_API_URL + "/auth/discord", {
         method: "POST",
