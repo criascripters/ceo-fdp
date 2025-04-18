@@ -3,6 +3,7 @@ import LoginButton from './components/DiscordLogin'
 import Footer from './components/Footer'
 import MainContent from './components/MainContent'
 import OutOfOfficeWarning from './components/OutOfOfficeWarning'
+import { Spinner } from './components/Spinner'
 import { useLogin } from './contexts/LoginProvider'
 
 function App() {
@@ -10,7 +11,12 @@ function App() {
   const { isLoggedIn } = useLogin()
   // #endregion
 
-  if (isLoggedIn === null) return <div>Loading...</div>
+  if (isLoggedIn === null)
+    return (
+      <div className="bg-transparent h-screen flex flex-col justify-center">
+        <Spinner />
+      </div>
+    )
 
   if (!isLoggedIn) return <LoginButton />
 
