@@ -13,10 +13,17 @@ interface LoginContextState {
    * - `false`: The user is not logged in.
    */
   isLoggedIn: boolean | null
+  /**
+   * Defines whether the user is an admin or not.
+   * - `null`: The website is verifying the user's admin state.
+   * - `true`: The user is an admin.
+   * - `false`: The user is not an admin.
+   */
+  isAdmin: boolean | null
 }
 
 interface LoginContextAction {
-  type: 'set-is-logged-in'
+  type: 'set-is-logged-in' | 'set-is-admin'
   payload: boolean
 }
 // #endregion
@@ -39,6 +46,7 @@ export function useLoginDispatch() {
 export default function LoginProvider({ children }: Readonly<LoginProviderProps>) {
   const initialState: LoginContextState = {
     isLoggedIn: null,
+    isAdmin: null,
   }
 
   const [state, dispatch] = useReducer(LoginReducer, initialState)
@@ -62,11 +70,13 @@ export default function LoginProvider({ children }: Readonly<LoginProviderProps>
     
     authService
       .validateCookieCode({ code })
-      .then(() => {
+      .then((res) => {
         dispatch({ type: 'set-is-logged-in', payload: true })
+        dispatch({ type: 'set-is-admin', payload: res.isAdmin })
       })
       .catch((err: unknown) => {
         dispatch({ type: 'set-is-logged-in', payload: false })
+        dispatch({ type: 'set-is-admin', payload: false })
 
         if (isAxiosError(err)) {
           if (err.response?.status === 400) {
@@ -100,6 +110,11 @@ function LoginReducer(state: LoginContextState, action: LoginContextAction): Log
       if (state.isLoggedIn === action.payload) return state
 
       return { ...state, isLoggedIn: action.payload }
+    }
+    case 'set-is-admin': {
+      if (state.isAdmin === action.payload) return state
+
+      return { ...state, isAdmin: action.payload }
     }
     default: {
       return state

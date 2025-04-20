@@ -8,6 +8,10 @@ interface IProps {
   api: AxiosInstance
 }
 
+interface IValidateCookieCodeApiResponse {
+  isAdmin: boolean
+}
+
 export default class AuthApiService implements IAuthGateway {
   private readonly props: IProps
 
@@ -18,8 +22,6 @@ export default class AuthApiService implements IAuthGateway {
   async validateCookieCode(
     request: IAuthGatewayValidateCookieCodeRequest
   ): Promise<IAuthGatewayValidateCookieCodeResponse> {
-    await this.props.api.post('/auth/discord', request)
-
-    return undefined
+    return await this.props.api.post<IValidateCookieCodeApiResponse>('/auth/discord', request).then((res) => res.data)
   }
 }
