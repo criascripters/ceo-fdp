@@ -110,12 +110,6 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
       res.status(400).send("Missing code.");
       return;
     }
-    
-    const token = await getDiscordToken(code);
-    if (!token) {
-      res.status(401).send(token);
-      return;
-    }
 
     try {
       const token = await getDiscordToken(code);
