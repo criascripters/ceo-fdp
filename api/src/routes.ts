@@ -14,9 +14,9 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/db", async (req: Request, res: Response) => {
+router.get("/messages", async (req: Request, res: Response) => {
   try {
-    const message = await Message.find();
+    const message = await Message.find().select("name message createdAt");
     res.json(message);
   } catch (error) {
     console.log(error);

@@ -39,7 +39,7 @@ export default class MessagesApiService implements IMessagesGateway {
     const { page = 1, perPage = 10 } = request
 
     return this.props.api
-      .get<IRawMessage[]>('/db', { params: { page, perPage } })
+      .get<IRawMessage[]>('/messages', { params: { page, perPage } })
       .then((response) => ({ messages: response.data.map(this.parseRawMessage.bind(this)) }))
   }
 
