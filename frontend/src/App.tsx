@@ -12,10 +12,6 @@ function App() {
   const { isLoggedIn } = useLogin()
   // #endregion
 
-  useEffect(() => {
-    fetch('/test', { method: 'GET' }).then((res) => console.log(res))
-  }, [])
-
   if (isLoggedIn === null)
     return (
       <div className="bg-transparent h-screen flex flex-col justify-center">
@@ -26,11 +22,10 @@ function App() {
   if (!isLoggedIn) return <LoginButton />
 
   return (
-    <div className="flex flex-col justify-between items-center h-screen overflow-hidden bg-gray-300">
+    <div className="flex flex-col justify-between items-center h-dvh overflow-hidden bg-gray-300">
       <OutOfOfficeWarning />
       <MainContent />
       <Footer />
-      <Toaster />
     </div>
   )
 }

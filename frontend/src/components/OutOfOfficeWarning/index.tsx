@@ -17,8 +17,8 @@ export default function OutOfOfficeWarning() {
   return (
     <div
       className="flex items-center justify-center gap-2 flex-none w-full p-2 leading-none
-          text-center font-bold text-[0.85rem]
-          bg-red-500 text-white
+        text-center font-bold text-[0.85rem]
+        bg-red-500 text-white
       "
     >
       <img className="clock" src="./clock.png" alt="relógio" />
