@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from "express";
 import Message from "./models/Message";
 import PastMessages from "./models/PastMessages";
 import { getDiscordToken } from "./utils/getDiscordToken";
-import { getDiscordUserInfo } from "./utils/getDiscordUserInfo";
 import { getGeo } from "./utils/getGeo";
 import { settings } from "./utils/settings";
 const router = express.Router();
@@ -83,34 +82,36 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
 
 router.post("/auth/discord", async (req: Request, res: Response) => {
   try {
+    /*
     // Validate through access token (from cookies)
-    const cookieToken = req.cookies?.token
+    const cookieToken = req.cookies?.token;
     if (typeof cookieToken === "string" && cookieToken !== "") {
       try {
-        await getDiscordUserInfo(cookieToken)
+        await getDiscordUserInfo(cookieToken);
         res.status(200).send("OK");
 
         return;
       } catch (error) {
         // do nothing
       }
-    }
+    }*/
 
     // Validate through oauth code (from body)
     const { code } = req.body;
+    console.log("### code: ", code);
     if (!code) {
       res.status(400).send("Missing code.");
-      return
+      return;
     }
 
     const token = await getDiscordToken(code);
-    if (!token.access_token) {
-      res.status(401).send(token.error_description);
+    if (!token) {
+      res.status(401).send(token);
       return;
     }
 
     res
-      .cookie("token", token.access_token, {
+      .cookie("token", token, {
         httpOnly: true,
         secure: settings.env === "prod",
         sameSite: "strict",

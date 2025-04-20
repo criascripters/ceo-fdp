@@ -1,27 +1,18 @@
-import { settings } from "./settings";
+import oauth from "./oauth";
 
 export async function getDiscordToken(code: string) {
-  const params = new URLSearchParams();
-  params.append("grant_type", "authorization_code");
-  params.append("code", code);
-  params.append("redirect_uri", settings.redirectUri);
-  params.append("client_id", settings.discordClientId);
-  params.append("client_secret", settings.discordClientSecret);
+  try {
+    const token = oauth
+      .tokenRequest({
+        code: code,
+        scope: "identify guilds",
+        grantType: "authorization_code",
+      })
+      .then((res) => res);
 
-  const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: params,
-    credentials: "include",
-  });
-
-  const tokenData = await tokenRes.json();
-
-  if (tokenData.error) {
-    console.error(`[ERROR] ${tokenData.error_description || "Erro ao obter token do Discord"}`);
+    return token;
+  } catch (err) {
+    console.error("[OAuth ERROR]", err);
+    return { error: err };
   }
-
-  return tokenData;
 }
