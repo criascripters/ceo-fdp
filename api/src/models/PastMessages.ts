@@ -12,6 +12,7 @@ const messageSchema = new mongoose.Schema({
   userCity: String,
   userISP: String,
   userOrg: String,
+  discordUser: { id: String, username: String, email: String, verified: Boolean },
 });
 
 const PastMessages = mongoose.model("pastMessages", messageSchema);
