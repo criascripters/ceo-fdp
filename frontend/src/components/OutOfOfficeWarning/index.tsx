@@ -8,7 +8,7 @@ export default function OutOfOfficeWarning() {
   // #region States
   const showWarning = useMemo(() => {
     const currentHour = new Date().getHours()
-    return currentHour <= 18 || currentHour < 8
+    return currentHour >= 18 || currentHour < 8
   }, [])
   // #endregion
 
