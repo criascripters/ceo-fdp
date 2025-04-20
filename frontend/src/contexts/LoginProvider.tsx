@@ -59,6 +59,7 @@ export default function LoginProvider({ children }: Readonly<LoginProviderProps>
     const params = new URLSearchParams(window.location.search)
     const code = params.get('code') ?? sessionStorage.getItem('code') ?? undefined
 
+    
     authService
       .validateCookieCode({ code })
       .then(() => {

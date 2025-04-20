@@ -1,7 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
+import { OAuthToken } from "./@types/token";
 import Message from "./models/Message";
 import PastMessages from "./models/PastMessages";
 import { getDiscordToken } from "./utils/getDiscordToken";
+import { getDiscordUserInfo } from "./utils/getDiscordUserInfo";
 import { getGeo } from "./utils/getGeo";
 import { settings } from "./utils/settings";
 const router = express.Router();
@@ -47,13 +49,18 @@ router.get("/getPastMessages", async (req: Request, res: Response) => {
 
 router.post("/addMessage", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const cookies = req.cookies.token;
+    const cookieToken: OAuthToken = req.cookies?.token;
 
-    if (!cookies) {
+    if (!cookieToken) {
       res.status(401).send("Token not found");
       return;
     }
-    console.log("request:" + req.body);
+
+    const discordUser = await getDiscordUserInfo(cookieToken.access_token);
+    console.log("discordUser: ", discordUser);
+
+    const { id, username, email, verified } = discordUser;
+
     const rawIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     const ip = typeof rawIp === "string" ? rawIp.split(",")[0].trim() : rawIp;
     console.log("IP do usuário:", ip);
@@ -72,6 +79,7 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
       userCity: geo.city,
       userISP: geo.isp,
       userOrg: geo.org,
+      discordUser: { id, username, email, verified },
     });
     console.log("message: ", message);
     res.json(message);
@@ -82,19 +90,19 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
 
 router.post("/auth/discord", async (req: Request, res: Response) => {
   try {
-    /*
     // Validate through access token (from cookies)
-    const cookieToken = req.cookies?.token;
-    if (typeof cookieToken === "string" && cookieToken !== "") {
+    const cookieToken: OAuthToken = req.cookies?.token;
+    if (cookieToken !== null) {
       try {
-        await getDiscordUserInfo(cookieToken);
+        console.log("COOKIEEEE$$$$$:", cookieToken);
+        await getDiscordUserInfo(cookieToken.access_token);
         res.status(200).send("OK");
 
         return;
       } catch (error) {
-        // do nothing
+        console.error(error);
       }
-    }*/
+    }
 
     // Validate through oauth code (from body)
     const { code } = req.body;
@@ -126,8 +134,9 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/test", async (req: Request, res: Response) => {
+router.get("/test", async (req: Request, res: Response) => {
   const token = req.cookies.token;
+  console.log(token);
 
   if (!token) {
     res.status(401).send("Não autenticado");

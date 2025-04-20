@@ -3,8 +3,10 @@ import cors from "cors";
 import express from "express";
 import { rateLimit } from "express-rate-limit";
 import serverless from "serverless-http";
+import swaggerUi from "swagger-ui-express";
 import "../database";
 import router from "../routes";
+import swaggerSpec from "../swagger";
 
 const app = express();
 const limiter = rateLimit({
@@ -25,6 +27,8 @@ app.use(
     credentials: true,
   })
 );
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/", router);
 app.set("trust proxy", true);
 app.use(limiter);

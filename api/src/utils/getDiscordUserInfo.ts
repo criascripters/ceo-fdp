@@ -1,13 +1,7 @@
-export async function getDiscordUserInfo(accessToken: string) {
-  const res = await fetch("https://discord.com/api/users/@me", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+import oauth from "./oauth";
 
-  if (!res.ok) {
-    throw new Error("Falha ao buscar dados do usuário Discord");
-  }
+export async function getDiscordUserInfo(accessToken: string): Promise<any> {
+  const res = await oauth.getUser(accessToken);
 
-  return res.json();
+  return res;
 }

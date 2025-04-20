@@ -1,4 +1,5 @@
 import { Toaster } from '@/components/ui/sonner'
+import { useEffect } from 'react'
 import LoginButton from './components/DiscordLogin'
 import Footer from './components/Footer'
 import MainContent from './components/MainContent'
@@ -10,6 +11,10 @@ function App() {
   // #region Contexts
   const { isLoggedIn } = useLogin()
   // #endregion
+
+  useEffect(() => {
+    fetch('/test', { method: 'GET' }).then((res) => console.log(res))
+  }, [])
 
   if (isLoggedIn === null)
     return (
