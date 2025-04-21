@@ -1,5 +1,3 @@
-import { Toaster } from '@/components/ui/sonner'
-import { useEffect } from 'react'
 import LoginButton from './components/DiscordLogin'
 import Footer from './components/Footer'
 import MainContent from './components/MainContent'
