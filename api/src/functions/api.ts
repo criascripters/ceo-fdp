@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://po.criascript.dev", "http://localhost:5173"],
+    origin: ["https://po.criascript.dev", "http://localhost:5173","https://po-criascript.netlify.app"],
     methods: ["GET", "POST"],
     allowedHeaders: ["X-PINGOTHER", "Content-Type"],
     exposedHeaders: ["Set-Cookie"],
