@@ -2,10 +2,11 @@ import express, { NextFunction, Request, Response } from "express";
 import { OAuthToken } from "./@types/token";
 import Message from "./models/Message";
 import PastMessages from "./models/PastMessages";
+import IsAdminService from "./services/users/is-admin";
+import { defaultCookieOptions } from "./utils/defaultCookieOptions";
 import { getDiscordToken } from "./utils/getDiscordToken";
 import { getDiscordUserInfo } from "./utils/getDiscordUserInfo";
 import { getGeo } from "./utils/getGeo";
-import { settings } from "./utils/settings";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -89,18 +90,16 @@ router.post("/addMessage", async (req: Request, res: Response, next: NextFunctio
 });
 
 router.post("/auth/discord", async (req: Request, res: Response) => {
+  const isAdminService = new IsAdminService()
+
   try {
     // Validate through access token (from cookies)
-    const cookieToken: OAuthToken = req.cookies?.token;
-    if (cookieToken !== null) {
-      try {
-        console.log("COOKIEEEE$$$$$:", cookieToken);
-        await getDiscordUserInfo(cookieToken.access_token);
-        res.status(200).send("OK");
-
-        return;
-      } catch (error) {
-        console.error(error);
+    const cookieToken = req.cookies?.token
+    if (typeof cookieToken === "string" && cookieToken !== "") {
+      const isAdmin = await isAdminService.execute(cookieToken)
+      if (isAdmin !== null) {
+        res.cookie("is_admin", isAdmin, defaultCookieOptions).status(200).send({ isAdmin })
+        return
       }
     }
 
@@ -112,22 +111,19 @@ router.post("/auth/discord", async (req: Request, res: Response) => {
       return;
     }
 
-    const token = await getDiscordToken(code);
-    if (!token) {
-      res.status(401).send(token);
+    try {
+      const token = await getDiscordToken(code);
+      const isAdmin = await isAdminService.execute(token.access_token);
+      res
+        .cookie("token", token.access_token, defaultCookieOptions)
+        .cookie("is_admin", isAdmin, defaultCookieOptions)
+        .status(200)
+        .send({ isAdmin });
+    } catch (err: unknown) {
+      res.status(401).send(err instanceof Error ? err.message : "Código inválido.");
+
       return;
     }
-
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: settings.env === "prod",
-        sameSite: "strict",
-        path: "/",
-        maxAge: 1000 * 60 * 60 * 24,
-      })
-      .status(200)
-      .send("OK");
   } catch (error) {
     console.error(error);
     res.status(500).send("Error");

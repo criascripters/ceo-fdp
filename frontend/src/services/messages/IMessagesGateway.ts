@@ -1,40 +1,51 @@
-import { IMessage } from "@/@types/message"
+import { IMessage } from '@/@types/message'
 
 export interface IMessagesGatewayAddMessageRequest {
-    name: string
-    message: string
+  name: string
+  message: string
 }
 
 export interface IMessagesGatewayAddMessageResponse {
-    message: IMessage
+  message: IMessage
 }
 
 export interface IMessagesGatewayListMessagesRequest {
-    page?: number
-    perPage?: number
+  page?: number
+  perPage?: number
 }
 
 export interface IMessagesGatewayListMessagesResponse {
-    messages: IMessage[]
+  messages: IMessage[]
 }
 
 export interface IMessagesGatewayGetLastMessageResponse {
-    message: IMessage
+  message: IMessage
 }
 
+export interface IMessagesGatewayDeleteMessageRequest {
+  messageId: string
+}
+
+export type IMessagesGatewayDeleteMessageResponse = undefined
+
 export default interface IMessagesGateway {
-    /**
-     * Envia uma nova mensagem para a fila.
-     */
-    addMessage(message: IMessagesGatewayAddMessageRequest): Promise<IMessagesGatewayAddMessageResponse>
+  /**
+   * Sends a new message to the queue.
+   */
+  addMessage(message: IMessagesGatewayAddMessageRequest): Promise<IMessagesGatewayAddMessageResponse>
 
-    /**
-     * Lista as últimas mensagens enviadas por todos os usuários.
-     */
-    listMessages(request?: IMessagesGatewayListMessagesRequest): Promise<IMessagesGatewayListMessagesResponse>
+  /**
+   * Lists the last messages sent by all users.
+   */
+  listMessages(request?: IMessagesGatewayListMessagesRequest): Promise<IMessagesGatewayListMessagesResponse>
 
-    /**
-     * Obtém a última mensagem enviada.
-     */
-    getLastMessage(): Promise<IMessagesGatewayGetLastMessageResponse>
+  /**
+   * Gets the last message sent.
+   */
+  getLastMessage(): Promise<IMessagesGatewayGetLastMessageResponse>
+
+  /**
+   * Deletes a message by its ID.
+   */
+  deleteMessage(request: IMessagesGatewayDeleteMessageRequest): Promise<IMessagesGatewayDeleteMessageResponse>
 }

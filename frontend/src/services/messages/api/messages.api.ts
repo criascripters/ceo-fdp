@@ -3,6 +3,8 @@ import { AxiosInstance } from 'axios'
 import IMessagesGateway, {
   IMessagesGatewayAddMessageRequest,
   IMessagesGatewayAddMessageResponse,
+  IMessagesGatewayDeleteMessageRequest,
+  IMessagesGatewayDeleteMessageResponse,
   IMessagesGatewayGetLastMessageResponse,
   IMessagesGatewayListMessagesRequest,
   IMessagesGatewayListMessagesResponse,
@@ -28,7 +30,6 @@ export default class MessagesApiService implements IMessagesGateway {
 
   public async addMessage(request: IMessagesGatewayAddMessageRequest): Promise<IMessagesGatewayAddMessageResponse> {
     return this.props.api.post<IRawMessage>('/addMessage', request).then((response) => {
-      console.log('raw response:', response.data)
       return { message: this.parseRawMessage(response.data) }
     })
   }
@@ -47,6 +48,14 @@ export default class MessagesApiService implements IMessagesGateway {
     return this.props.api
       .get<IRawMessage>('/getLastMessage')
       .then((response) => ({ message: this.parseRawMessage(response.data) }))
+  }
+
+  public async deleteMessage(
+    request: IMessagesGatewayDeleteMessageRequest
+  ): Promise<IMessagesGatewayDeleteMessageResponse> {
+    const { messageId } = request
+
+    return this.props.api.delete<null>(`/messages/${messageId}`).then(() => undefined)
   }
 
   private parseRawMessage(message: IRawMessage): IMessage {

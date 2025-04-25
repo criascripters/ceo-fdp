@@ -2,7 +2,9 @@ export interface IAuthGatewayValidateCookieCodeRequest {
   code?: string
 }
 
-export type IAuthGatewayValidateCookieCodeResponse = undefined
+export interface IAuthGatewayValidateCookieCodeResponse {
+  isAdmin: boolean
+}
 
 export default interface IAuthGateway {
   /**
