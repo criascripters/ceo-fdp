@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input'
 import { useMessagesDispatch } from '@/contexts/MessagesProvider'
 import { useService } from '@/contexts/ServiceProvider'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { useCallback } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import DefaultBackground from '../DefaultBackground'
 import './index.css'
@@ -30,32 +31,32 @@ export default function MainForm() {
   // #endregion
 
   // #region Callbacks
-  function onSubmit(values: IFormSchema) {
-    const payload = { name: values.name, message: values.message, targets: values.targets }
-    console.log(values)
-    console.log(payload)
+  const onSubmit: SubmitHandler<IFormSchema> = useCallback(
+    (values, e) => {
+      e?.preventDefault()
 
-    messagesService
-      .addMessage(payload)
-      .then(({ message }) => {
-        form.reset()
-        toast('Mensagem adicionada com sucesso')
-        messagesDispatch({ type: 'add-message', payload: message })
-      })
-      .catch((error: unknown) => {
-        console.error(error)
-        toast('Não foi possível enviar a mensagem. Tente novamente mais tarde.')
-      })
-  }
+      const payload = { name: values.name, message: values.message, targets: values.targets }
+
+      messagesService
+        .addMessage(payload)
+        .then(({ message }) => {
+          form.reset()
+          toast('Mensagem adicionada com sucesso')
+          messagesDispatch({ type: 'add-message', payload: message })
+        })
+        .catch((error: unknown) => {
+          console.error(error)
+          toast('Não foi possível enviar a mensagem. Tente novamente mais tarde.')
+        })
+    },
+    [messagesService, messagesDispatch, form]
+  )
   // #endregion
 
   return (
     <DefaultBackground className="w-full flex-1 flex items-center justify-center overflow-hidden">
       <Form {...form}>
-        <form
-          onSubmit={void form.handleSubmit(onSubmit)}
-          className="space-y-8 max-w-[400px] sm:overflow-auto px-6 my-6"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-[400px] sm:overflow-auto px-6 my-6">
           <FormField
             control={form.control}
             name="name"
