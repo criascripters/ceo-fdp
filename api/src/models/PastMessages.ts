@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 const messageSchema = new mongoose.Schema({
   message: String,
@@ -13,8 +13,8 @@ const messageSchema = new mongoose.Schema({
   userISP: String,
   userOrg: String,
   discordUser: { id: String, username: String, email: String, verified: Boolean },
-});
+})
 
-const PastMessages = mongoose.model("pastMessages", messageSchema);
+const PastMessages = mongoose.model('pastMessages', messageSchema)
 
-export default PastMessages;
+export default PastMessages

@@ -1,4 +1,9 @@
+# NodeJS
 node_modules
-# Keep environment variables out of version control
+dist/
+
+# Env vars
 .env
+
+# Coverage
 .early.coverage
