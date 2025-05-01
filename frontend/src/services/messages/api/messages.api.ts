@@ -29,7 +29,7 @@ export default class MessagesApiService implements IMessagesGateway {
   }
 
   public async addMessage(request: IMessagesGatewayAddMessageRequest): Promise<IMessagesGatewayAddMessageResponse> {
-    return this.props.api.post<IRawMessage>('/addMessage', request).then((response) => {
+    return this.props.api.post<IRawMessage>('/api/addMessage', request).then((response) => {
       return { message: this.parseRawMessage(response.data) }
     })
   }
@@ -40,13 +40,13 @@ export default class MessagesApiService implements IMessagesGateway {
     const { page = 1, perPage = 10 } = request
 
     return this.props.api
-      .get<IRawMessage[]>('/messages', { params: { page, perPage } })
+      .get<IRawMessage[]>('/api/messages', { params: { page, perPage } })
       .then((response) => ({ messages: response.data.map(this.parseRawMessage.bind(this)) }))
   }
 
   public async getLastMessage(): Promise<IMessagesGatewayGetLastMessageResponse> {
     return this.props.api
-      .get<IRawMessage>('/getLastMessage')
+      .get<IRawMessage>('/api/getLastMessage')
       .then((response) => ({ message: this.parseRawMessage(response.data) }))
   }
 
@@ -55,7 +55,7 @@ export default class MessagesApiService implements IMessagesGateway {
   ): Promise<IMessagesGatewayDeleteMessageResponse> {
     const { messageId } = request
 
-    return this.props.api.delete<null>(`/messages/${messageId}`).then(() => undefined)
+    return this.props.api.delete<null>(`/admin/messages/${messageId}`).then(() => undefined)
   }
 
   private parseRawMessage(message: IRawMessage): IMessage {
