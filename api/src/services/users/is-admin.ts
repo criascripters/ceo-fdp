@@ -1,6 +1,6 @@
-import { APIUser as DiscordUser } from "discord-api-types/v10";
-import Admins from "../../models/Admins";
-import { getDiscordUserInfo } from "../../utils/getDiscordUserInfo";
+import { APIUser as DiscordUser } from 'discord-api-types/v10'
+import Admins from '../../models/Admins'
+import { getDiscordUserInfo } from '../../utils/getDiscordUserInfo'
 
 /**
  * Determines whether a user is an admin based on their Discord ID and username.
@@ -15,7 +15,7 @@ export default class IsAdminService {
   async execute(discordUser: DiscordUser | string): Promise<boolean | null> {
     let dataToVerify: DiscordUser | null = null
 
-    if (typeof discordUser === "string") {
+    if (typeof discordUser === 'string') {
       try {
         dataToVerify = await getDiscordUserInfo(discordUser)
       } catch (error) {
